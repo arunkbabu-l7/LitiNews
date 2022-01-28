@@ -3,7 +3,7 @@ package com.litmus7.news.viewmodel
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.litmus7.news.domain.NewsResponse
-import com.litmus7.news.repository.NewsRepository
+import com.litmus7.news.repository.NewsByTopicRepository
 import com.litmus7.news.util.NewsEvent
 import com.litmus7.news.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,9 +13,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsByTopicViewModel @Inject constructor(
-    private val repository: NewsRepository
+    private val repository: NewsByTopicRepository
 ) : BaseViewModel() {
-    private val tag = TopHeadlinesViewModel::class.simpleName
+    private val tag = HeadlinesViewModel::class.simpleName
 
     fun fetchNewsTopic(topic: String = "bitcoin") {
         Log.d(tag, "fetchNewsTopic()")

@@ -3,7 +3,7 @@ package com.litmus7.news.viewmodel
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.litmus7.news.domain.NewsResponse
-import com.litmus7.news.repository.NewsRepository
+import com.litmus7.news.repository.HeadlinesRepository
 import com.litmus7.news.util.NewsEvent
 import com.litmus7.news.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,10 +12,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TopHeadlinesViewModel @Inject constructor(
-    private val repository: NewsRepository
+class HeadlinesViewModel @Inject constructor(
+    private val repository: HeadlinesRepository
 ) : BaseViewModel() {
-    private val tag = TopHeadlinesViewModel::class.simpleName
+    private val tag = HeadlinesViewModel::class.simpleName
 
     fun fetchTopHeadlines(country: String = "in") {
         Log.d(tag, "fetchTopHeadlines()")

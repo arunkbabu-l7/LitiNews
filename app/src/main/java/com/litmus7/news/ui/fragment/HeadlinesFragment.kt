@@ -8,27 +8,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.litmus7.news.databinding.FragmentNewsByTopicBinding
+import com.litmus7.news.databinding.FragmentHeadlinesBinding
 import com.litmus7.news.domain.Article
-import com.litmus7.news.ui.activity.MainActivity
-import com.litmus7.news.ui.activity.NewsDetailsActivity
+import com.litmus7.news.ui.activity.DetailsActivity
+import com.litmus7.news.ui.activity.HeadlinesActivity
 import com.litmus7.news.ui.adapter.NewsAdapter
 import com.litmus7.news.util.*
 
-class NewsByTopicFragment : Fragment() {
-    private var _binding: FragmentNewsByTopicBinding? = null
+class HeadlinesFragment : Fragment() {
+    private var _binding: FragmentHeadlinesBinding? = null
     private val binding get() = _binding!!
     private val newsList: ArrayList<Article> = arrayListOf()
     private var adapter: NewsAdapter? = null
 
     companion object {
         const val FRAGMENT_TAG = "news_topic_fragment_tag"
-        private val TAG: String = NewsByTopicFragment::class.java.simpleName
+        private val TAG: String = HeadlinesFragment::class.java.simpleName
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
-        _binding = FragmentNewsByTopicBinding.inflate(inflater, container, false)
+        _binding = FragmentHeadlinesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -40,8 +40,8 @@ class NewsByTopicFragment : Fragment() {
         binding.rvNewsByTopic.setHasFixedSize(true)
 
         adapter?.setOnItemClickListener { article, _ ->
-            // Launch NewsDetailsActivity
-            val newsDetailsActivityIntent = Intent(activity, NewsDetailsActivity::class.java).apply {
+            // Launch DetailsActivity
+            val newsDetailsActivityIntent = Intent(activity, DetailsActivity::class.java).apply {
                 val bundle = Bundle().apply {
                     putString(NEWS_AUTHOR_KEY, article.author)
                     putString(NEWS_CONTENT_KEY, article.content)
@@ -66,7 +66,7 @@ class NewsByTopicFragment : Fragment() {
         adapter?.notifyItemRangeRemoved(0, oldSize)
         this.newsList.addAll(newsList)
         adapter?.notifyItemRangeInserted(0, newsList.size)
-        (activity as MainActivity).hasData = newsList.isNotEmpty()
+        (activity as HeadlinesActivity).hasData = newsList.isNotEmpty()
     }
 
     override fun onDestroyView() {

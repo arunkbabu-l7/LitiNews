@@ -7,15 +7,15 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import com.litmus7.news.R
-import com.litmus7.news.databinding.ActivityMainBinding
-import com.litmus7.news.ui.fragment.NewsByTopicFragment
+import com.litmus7.news.databinding.ActivityHeadlinesBinding
+import com.litmus7.news.ui.fragment.HeadlinesFragment
 import com.litmus7.news.util.NewsEvent
-import com.litmus7.news.viewmodel.TopHeadlinesViewModel
+import com.litmus7.news.viewmodel.HeadlinesViewModel
 
-class MainActivity : BaseActivity() {
-    private lateinit var binding: ActivityMainBinding
-    private val tag = MainActivity::class.java.simpleName
-    private val viewModel: TopHeadlinesViewModel by viewModels()
+class HeadlinesActivity : BaseActivity() {
+    private lateinit var binding: ActivityHeadlinesBinding
+    private val tag = HeadlinesActivity::class.java.simpleName
+    private val viewModel: HeadlinesViewModel by viewModels()
     var hasData = false
 
     companion object {
@@ -24,7 +24,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityHeadlinesBinding.inflate(layoutInflater)
         progressBar = binding.progressBar
         errorLayout = binding.errorLayout.root
         setContentView(binding.root)
@@ -33,7 +33,7 @@ class MainActivity : BaseActivity() {
         if (savedInstanceState == null) {
             fragManager.commit {
                 setReorderingAllowed(true)
-                add<NewsByTopicFragment>(R.id.fragment_container_view, NewsByTopicFragment.FRAGMENT_TAG)
+                add<HeadlinesFragment>(R.id.fragment_container_view, HeadlinesFragment.FRAGMENT_TAG)
             }
         } else {
             hasData = savedInstanceState.getBoolean(HAS_DATA_SAVE_INSTANCE_KEY)
@@ -48,7 +48,7 @@ class MainActivity : BaseActivity() {
                     Log.i(tag, "Success")
                     hideProgressCircle()
                     binding.fragmentContainerView.isVisible = true
-                    val fragment = fragManager.findFragmentByTag(NewsByTopicFragment.FRAGMENT_TAG) as NewsByTopicFragment?
+                    val fragment = fragManager.findFragmentByTag(HeadlinesFragment.FRAGMENT_TAG) as HeadlinesFragment?
                     fragment?.onDataLoaded(newsEvent.articles)
                 }
                 is NewsEvent.Failure -> {

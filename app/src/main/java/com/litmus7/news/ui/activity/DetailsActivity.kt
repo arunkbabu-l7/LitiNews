@@ -8,12 +8,12 @@ import android.util.Log
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.litmus7.news.databinding.ActivityNewsDetailsBinding
+import com.litmus7.news.databinding.ActivityDetailsBinding
 import com.litmus7.news.util.*
 
-class NewsDetailsActivity : BaseActivity() {
-    private lateinit var binding: ActivityNewsDetailsBinding
-    private val tag = NewsDetailsActivity::class.java.simpleName
+class DetailsActivity : BaseActivity() {
+    private lateinit var binding: ActivityDetailsBinding
+    private val tag = DetailsActivity::class.java.simpleName
 
     private var author = ""
     private var content = ""
@@ -26,7 +26,7 @@ class NewsDetailsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityNewsDetailsBinding.inflate(layoutInflater)
+        binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Log.d(tag, "onCreate()")
 

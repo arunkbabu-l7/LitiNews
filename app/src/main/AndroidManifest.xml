@@ -3,6 +3,7 @@
     package="com.litmus7.news">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".di.NewsApplicationClass"
@@ -13,10 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LitiNews">
         <activity
-            android:name=".ui.activity.NewsDetailsActivity"
+            android:name=".ui.activity.DetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".ui.activity.HeadlinesActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

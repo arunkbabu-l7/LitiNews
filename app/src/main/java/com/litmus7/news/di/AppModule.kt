@@ -1,54 +1,22 @@
 package com.litmus7.news.di
 
-import com.litmus7.news.BuildConfig
 import com.litmus7.news.network.NewsApi
-import com.litmus7.news.repository.NewsRepository
-import com.litmus7.news.repository.NewsRepositoryImpl
-import com.litmus7.news.util.BASE_URL
+import com.litmus7.news.repository.HeadlinesRepository
+import com.litmus7.news.repository.NewsByTopicRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 object AppModule {
-
-    @Singleton
+    @ViewModelScoped
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
-        val client = OkHttpClient.Builder()
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        client.addInterceptor(loggingInterceptor)
-        client.addNetworkInterceptor { chain ->
-            val originalRequest: Request = chain.request()
-            val newRequest: Request = originalRequest.newBuilder()
-                .header("X-Api-Key", BuildConfig.API_KEY)
-                .build()
+    fun provideHeadlinesRepository(newsApi: NewsApi): HeadlinesRepository = HeadlinesRepository(newsApi)
 
-            chain.proceed(newRequest)
-        }
-        return client.build()
-    }
-
-    @Singleton
+    @ViewModelScoped
     @Provides
-    fun provideNewsApi(client: OkHttpClient): NewsApi {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(NewsApi::class.java)
-    }
-
-    @Provides
-    fun provideNewsRepository(newsApi: NewsApi): NewsRepository = NewsRepositoryImpl(newsApi)
+    fun provideNewsByTopicRepository(newsApi: NewsApi): NewsByTopicRepository = NewsByTopicRepository(newsApi)
 }
