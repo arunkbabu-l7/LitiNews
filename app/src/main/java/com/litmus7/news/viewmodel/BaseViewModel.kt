@@ -9,9 +9,16 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 abstract class BaseViewModel: ViewModel() {
     protected val allNewsMutable: MutableLiveData<NewsEvent> = MutableLiveData(NewsEvent.Empty)
     val allNews: LiveData<NewsEvent> = allNewsMutable
+    private val tag = BaseViewModel::class.simpleName
+
+    /**
+     * A RESOURCE LOCK to prevent sending multiple requests at once
+     */
+    protected var LOCK = false
 
     protected val exceptionHandler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         allNewsMutable.postValue(NewsEvent.Failure(throwable.message.toString()))
+        LOCK = false
     }
 
     override fun onCleared() {

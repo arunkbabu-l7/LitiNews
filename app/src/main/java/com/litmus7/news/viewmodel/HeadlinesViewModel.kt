@@ -19,14 +19,22 @@ class HeadlinesViewModel @Inject constructor(
 
     fun fetchTopHeadlines(country: String = "in") {
         Log.d(tag, "fetchTopHeadlines()")
+        Log.d(tag, "LOCK: $LOCK")
+        if (LOCK) return
+
         allNewsMutable.postValue(NewsEvent.Loading)
+        LOCK = true
 
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             when(val newsResult: Result<NewsResponse> = repository.getTopHeadlines(country)) {
                 is Result.Success -> {
+                    Log.d(tag, "fetchTopHeadlines::onSuccess()")
+                    LOCK = false
                     allNewsMutable.postValue(NewsEvent.Success(newsResult.data.articles))
                 }
                 is Result.Error -> {
+                    Log.d(tag, "fetchTopHeadlines::onFailure()")
+                    LOCK = false
                     allNewsMutable.postValue((NewsEvent.Failure(newsResult.exception.message.toString())))
                 }
             }
