@@ -13,13 +13,24 @@ class NewsRepositoryImpl @Inject constructor(
 ) : NewsRepository {
 
     @Throws(SocketTimeoutException::class)
-    override suspend fun getAllNews(topic: String): Result<NewsResponse> {
-        val response: Response<NewsResponse> = newsApi.getAllNews(topic)
+    override suspend fun getNewsByTopic(topic: String): Result<NewsResponse> {
+        val response: Response<NewsResponse> = newsApi.getNewsByTopic(topic)
         val result = response.body()
         return if (response.isSuccessful && result != null) {
             Result.Success(result)
         } else {
             Result.Error(NewsFetchException("Unable to Fetch News! Please try again"))
+        }
+    }
+
+    @Throws(SocketTimeoutException::class)
+    override suspend fun getTopHeadlines(country: String): Result<NewsResponse> {
+        val response: Response<NewsResponse> = newsApi.getTopHeadlines(country)
+        val result = response.body()
+        return if (response.isSuccessful && result != null) {
+            Result.Success(result)
+        } else {
+            Result.Error(NewsFetchException("Unable to Fetch News! Please Try again"))
         }
     }
 }

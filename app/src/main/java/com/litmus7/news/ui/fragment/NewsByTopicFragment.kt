@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.litmus7.news.databinding.FragmentNewsByTopicBinding
 import com.litmus7.news.domain.Article
+import com.litmus7.news.ui.activity.MainActivity
 import com.litmus7.news.ui.activity.NewsDetailsActivity
 import com.litmus7.news.ui.adapter.NewsAdapter
 import com.litmus7.news.util.*
@@ -17,9 +18,8 @@ import com.litmus7.news.util.*
 class NewsByTopicFragment : Fragment() {
     private var _binding: FragmentNewsByTopicBinding? = null
     private val binding get() = _binding!!
-    private val newsList: MutableList<Article> = mutableListOf()
+    private val newsList: ArrayList<Article> = arrayListOf()
     private var adapter: NewsAdapter? = null
-
 
     companion object {
         const val FRAGMENT_TAG = "news_topic_fragment_tag"
@@ -34,7 +34,6 @@ class NewsByTopicFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated()")
         adapter = NewsAdapter(newsList)
         binding.rvNewsByTopic.adapter = adapter
         binding.rvNewsByTopic.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -67,6 +66,7 @@ class NewsByTopicFragment : Fragment() {
         adapter?.notifyItemRangeRemoved(0, oldSize)
         this.newsList.addAll(newsList)
         adapter?.notifyItemRangeInserted(0, newsList.size)
+        (activity as MainActivity).hasData = newsList.isNotEmpty()
     }
 
     override fun onDestroyView() {
