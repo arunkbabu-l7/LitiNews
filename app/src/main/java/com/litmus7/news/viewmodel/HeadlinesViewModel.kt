@@ -22,7 +22,7 @@ class HeadlinesViewModel @Inject constructor(
         Log.d(tag, "LOCK: $LOCK")
         if (LOCK) return
 
-        allNewsMutable.postValue(NewsEvent.Loading)
+        _allNews.postValue(NewsEvent.Loading)
         LOCK = true
 
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
@@ -30,12 +30,12 @@ class HeadlinesViewModel @Inject constructor(
                 is Result.Success -> {
                     Log.d(tag, "fetchTopHeadlines::onSuccess()")
                     LOCK = false
-                    allNewsMutable.postValue(NewsEvent.Success(newsResult.data.articles))
+                    _allNews.postValue(NewsEvent.Success(newsResult.data.articles))
                 }
                 is Result.Error -> {
                     Log.d(tag, "fetchTopHeadlines::onFailure()")
                     LOCK = false
-                    allNewsMutable.postValue((NewsEvent.Failure(newsResult.exception.message.toString())))
+                    _allNews.postValue((NewsEvent.Failure(newsResult.exception.message.toString())))
                 }
             }
         }

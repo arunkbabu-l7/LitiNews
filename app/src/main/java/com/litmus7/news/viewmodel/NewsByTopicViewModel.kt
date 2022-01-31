@@ -20,15 +20,15 @@ class NewsByTopicViewModel @Inject constructor(
     fun fetchNewsTopic(topic: String = "bitcoin") {
         Log.d(tag, "fetchNewsTopic()")
 
-        allNewsMutable.postValue(NewsEvent.Loading)
+        _allNews.postValue(NewsEvent.Loading)
 
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             when (val newsResult: Result<NewsResponse> = repository.getNewsByTopic(topic)) {
                 is Result.Success -> {
-                    allNewsMutable.postValue(NewsEvent.Success(newsResult.data.articles))
+                    _allNews.postValue(NewsEvent.Success(newsResult.data.articles))
                 }
                 is Result.Error -> {
-                    allNewsMutable.postValue(NewsEvent.Failure(newsResult.exception.message.toString()))
+                    _allNews.postValue(NewsEvent.Failure(newsResult.exception.message.toString()))
                 }
             }
         }

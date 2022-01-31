@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.litmus7.news.databinding.FragmentHeadlinesBinding
 import com.litmus7.news.domain.Article
 import com.litmus7.news.ui.activity.DetailsActivity
@@ -36,7 +35,6 @@ class HeadlinesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         adapter = NewsAdapter(newsList)
         binding.rvNewsByTopic.adapter = adapter
-        binding.rvNewsByTopic.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.rvNewsByTopic.setHasFixedSize(true)
 
         adapter?.setOnItemClickListener { article, _ ->
