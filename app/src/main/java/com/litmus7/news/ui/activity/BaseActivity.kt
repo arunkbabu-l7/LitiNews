@@ -11,13 +11,18 @@ import dagger.hilt.android.AndroidEntryPoint
 abstract class BaseActivity : AppCompatActivity() {
     var progressBar: ProgressBar? = null
     var errorLayout: View? = null
+    var toast: Toast? = null
 
     fun showToast(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+        toast?.cancel()
+        toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT)
+        toast?.show()
     }
 
     fun showLongToast(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+        toast?.cancel()
+        toast = Toast.makeText(this, msg, Toast.LENGTH_LONG)
+        toast?.show()
     }
 
     fun showProgressCircle() {

@@ -7,8 +7,9 @@ import com.litmus7.news.util.NewsEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 
 abstract class BaseViewModel: ViewModel() {
-    protected val allNewsMutable: MutableLiveData<NewsEvent> = MutableLiveData(NewsEvent.Empty)
-    val allNews: LiveData<NewsEvent> = allNewsMutable
+    protected val allNewsMutable = MutableLiveData<NewsEvent>(NewsEvent.Empty)
+    val allNews: LiveData<NewsEvent> get() = allNewsMutable
+
     private val tag = BaseViewModel::class.simpleName
 
     /**
