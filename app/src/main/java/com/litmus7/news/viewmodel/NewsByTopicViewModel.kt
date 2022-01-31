@@ -1,6 +1,7 @@
 package com.litmus7.news.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.litmus7.news.domain.NewsResponse
 import com.litmus7.news.repository.NewsByTopicRepository
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class NewsByTopicViewModel @Inject constructor(
     private val repository: NewsByTopicRepository
 ) : BaseViewModel() {
+    val allNews: LiveData<NewsEvent> = _allNews
     private val tag = HeadlinesViewModel::class.simpleName
 
     fun fetchNewsTopic(topic: String = "bitcoin") {

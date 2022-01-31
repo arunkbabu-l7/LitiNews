@@ -5,11 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.litmus7.news.databinding.ItemNewsBinding
 import com.litmus7.news.domain.Article
-import com.litmus7.news.util.toCleanDate
 import javax.annotation.Nullable
 
 class NewsAdapter(private val newsList: List<Article>) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
@@ -26,24 +23,18 @@ class NewsAdapter(private val newsList: List<Article>) : RecyclerView.Adapter<Ne
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        holder.bind(newsList[position])
+        val article: Article = newsList[position]
+        holder.binding.article = article
+        holder.binding.executePendingBindings()
+        holder.bind(article)
     }
 
     override fun getItemCount() = newsList.size
 
-    inner class NewsViewHolder(private val binding: ItemNewsBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
+    inner class NewsViewHolder(val binding: ItemNewsBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
         private val tag = NewsViewHolder::class.java.simpleName
 
         fun bind(article: Article) {
-            // Load the news image
-            Glide.with(context)
-                .load(article.urlToImage)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(binding.ivThumbnail)
-
-            binding.tvNewsTitle.text = article.title
-            binding.tvDate.text = article.publishedAt.toCleanDate()
-            binding.tvSource.text = article.source.name
             Log.d(tag, "bind():: ${article.title}")
 
             binding.root.setOnClickListener {

@@ -1,6 +1,5 @@
 package com.litmus7.news.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.litmus7.news.util.NewsEvent
@@ -8,7 +7,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 
 abstract class BaseViewModel: ViewModel() {
     protected val _allNews = MutableLiveData<NewsEvent>(NewsEvent.Empty)
-    val allNews: LiveData<NewsEvent> = _allNews
 
     private val tag = BaseViewModel::class.simpleName
 
