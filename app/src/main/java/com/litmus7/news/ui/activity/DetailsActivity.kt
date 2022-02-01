@@ -2,67 +2,52 @@ package com.litmus7.news.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.UnderlineSpan
-import android.util.Log
 import androidx.core.net.toUri
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.litmus7.news.databinding.ActivityDetailsBinding
+import com.litmus7.news.domain.Article
+import com.litmus7.news.domain.Source
 import com.litmus7.news.util.*
 
 class DetailsActivity : BaseActivity() {
     private lateinit var binding: ActivityDetailsBinding
     private val tag = DetailsActivity::class.java.simpleName
 
-    private var author = ""
-    private var content = ""
-    private var description = ""
-    private var publishedAt = ""
-    private var source = ""
-    private var title = ""
-    private var url = ""
-    private var urlToImage = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Log.d(tag, "onCreate()")
 
         val articleBundle = intent?.getBundleExtra(NEWS_BUNDLE_EXTRAS_KEY)
+        articleBundle?.let { b ->
+            val author = b.getString(NEWS_AUTHOR_KEY) ?: ""
+            val content = b.getString(NEWS_CONTENT_KEY) ?: ""
+            val description = b.getString(NEWS_DESCRIPTION_KEY) ?: ""
+            val publishedAt = b.getString(NEWS_PUBLISHED_AT_KEY) ?: ""
+            val sourceName = b.getString(NEWS_SOURCE_NAME_KEY) ?: ""
+            val sourceId = b.getString(NEWS_SOURCE_ID_KEY) ?: ""
+            val title = b.getString(NEWS_TITLE_KEY) ?: ""
+            val url = b.getString(NEWS_URL_KEY) ?: ""
+            val urlToImage = b.getString(NEWS_IMAGE_URL_KEY) ?: ""
 
-        articleBundle?.let {
-            author = articleBundle.getString(NEWS_AUTHOR_KEY) ?: ""
-            content = articleBundle.getString(NEWS_CONTENT_KEY) ?: ""
-            description = articleBundle.getString(NEWS_DESCRIPTION_KEY) ?: ""
-            publishedAt = articleBundle.getString(NEWS_PUBLISHED_AT_KEY) ?: ""
-            source = articleBundle.getString(NEWS_SOURCE_KEY) ?: ""
-            title = articleBundle.getString(NEWS_TITLE_KEY) ?: ""
-            url = articleBundle.getString(NEWS_URL_KEY) ?: ""
-            urlToImage = articleBundle.getString(NEWS_IMAGE_URL_KEY) ?: ""
-        }
+            binding.article = Article(
+                author = author,
+                content = content,
+                description = description,
+                publishedAt = publishedAt,
+                cleanPublishDate = publishedAt.toCleanDate(),
+                source = Source(sourceId, sourceName),
+                title = title,
+                url = url,
+                urlToImage = urlToImage
+            )
 
-        // Load Image
-        Glide.with(this)
-            .load(urlToImage)
-            .transition(DrawableTransitionOptions.withCrossFade())
-            .into(binding.ivNewsImage)
-
-        // Apply an Underline on "Source"
-        val underlineString = SpannableString(source)
-        underlineString.setSpan(UnderlineSpan(), 0, source.length, 0)
-        binding.tvSource.text = underlineString
-        binding.tvSource.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = url.toUri()
+            // Apply an Underline on "Source"
+            binding.tvReadMore.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = url.toUri()
+                }
+                startActivity(intent)
             }
-            startActivity(intent)
         }
-
-        binding.tvTitle.text = title
-        binding.tvAuthor.text = author
-        binding.tvDate.text = publishedAt.toCleanDate()
-        binding.tvDescription.text = content
     }
 }

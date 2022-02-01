@@ -45,7 +45,7 @@ class HeadlinesFragment : Fragment() {
                     putString(NEWS_CONTENT_KEY, article.content)
                     putString(NEWS_DESCRIPTION_KEY, article.description)
                     putString(NEWS_PUBLISHED_AT_KEY, article.publishedAt)
-                    putString(NEWS_SOURCE_KEY, article.source.name)
+                    putString(NEWS_SOURCE_NAME_KEY, article.source.name)
                     putString(NEWS_TITLE_KEY, article.title)
                     putString(NEWS_URL_KEY, article.url)
                     putString(NEWS_IMAGE_URL_KEY, article.urlToImage)
