@@ -10,7 +10,9 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.litmus7.news.R
 import com.litmus7.news.databinding.ActivityHeadlinesBinding
 import com.litmus7.news.ui.fragment.HeadlinesFragment
@@ -86,33 +88,32 @@ class HeadlinesActivity : BaseActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.allNews.collect { newsEvent ->
-                when(newsEvent) {
-                    is NewsEvent.Success -> {
-                        Log.i(tag, "Success")
-                        hideProgressCircle()
-                        binding.fragmentContainerView.isVisible = true
-                        val fragment = fragManager.findFragmentByTag(HeadlinesFragment.FRAGMENT_TAG) as HeadlinesFragment?
-                        fragment?.onDataLoaded(newsEvent.articles)
-                    }
-                    is NewsEvent.Failure -> {
-                        Log.i(tag, "Failure")
-                        showError(newsEvent.errorText)
-                    }
-                    is NewsEvent.Empty -> {
-                        Log.i(tag, "Empty")
-                    }
-                    is NewsEvent.Loading -> {
-                        Log.i(tag, "Loading")
-                        binding.fragmentContainerView.isVisible = false
-                        showProgressCircle()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.allNews.collect { newsEvent ->
+                    when (newsEvent) {
+                        is NewsEvent.Success -> {
+                            Log.i(tag, "Success")
+                            hideProgressCircle()
+                            binding.fragmentContainerView.isVisible = true
+                            val fragment = fragManager.findFragmentByTag(HeadlinesFragment.FRAGMENT_TAG) as HeadlinesFragment?
+                            fragment?.onDataLoaded(newsEvent.articles)
+                        }
+                        is NewsEvent.Failure -> {
+                            Log.i(tag, "Failure")
+                            showError(newsEvent.errorText)
+                        }
+                        is NewsEvent.Empty -> {
+                            Log.i(tag, "Empty")
+                            showError(getString(R.string.err_news_empty))
+                        }
+                        is NewsEvent.Loading -> {
+                            Log.i(tag, "Loading")
+                            binding.fragmentContainerView.isVisible = false
+                            showProgressCircle()
+                        }
                     }
                 }
             }
-        }
-
-        viewModel.allNews.observe(this) { newsEvent ->
-
         }
     }
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.litmus7.news.databinding.FragmentHeadlinesBinding
 import com.litmus7.news.domain.Article
+import com.litmus7.news.network.hasNewData
 import com.litmus7.news.ui.activity.DetailsActivity
 import com.litmus7.news.ui.activity.HeadlinesActivity
 import com.litmus7.news.ui.adapter.NewsAdapter
@@ -56,15 +57,19 @@ class HeadlinesFragment : Fragment() {
         }
     }
 
-    fun onDataLoaded(newsList: List<Article>) {
+    fun onDataLoaded(newsArticles: List<Article>) {
         // Initialize Recycler View
-        Log.d(TAG, "onDataLoaded():: ${newsList.size}")
-        val oldSize = this.newsList.size
-        this.newsList.clear()
-        adapter?.notifyItemRangeRemoved(0, oldSize)
-        this.newsList.addAll(newsList)
-        adapter?.notifyItemRangeInserted(0, newsList.size)
-        (activity as HeadlinesActivity).hasData = newsList.isNotEmpty()
+        if (hasNewData) {
+            Log.d(TAG, "onDataLoaded():: ${newsArticles.size}")
+            hasNewData = false
+
+            val oldSize = newsList.size
+            newsList.clear()
+            adapter?.notifyItemRangeRemoved(0, oldSize)
+            newsList.addAll(newsArticles)
+            adapter?.notifyItemRangeInserted(0, newsArticles.size)
+            (activity as HeadlinesActivity).hasData = newsArticles.isNotEmpty()
+        }
     }
 
     override fun onDestroyView() {

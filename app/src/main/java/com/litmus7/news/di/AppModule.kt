@@ -15,10 +15,6 @@ import dagger.hilt.android.scopes.ViewModelScoped
 object AppModule {
     @ViewModelScoped
     @Provides
-    fun provideHeadlinesDataSource(newsApi: NewsApi): HeadlinesDataSource = HeadlinesDataSource(newsApi)
-
-    @ViewModelScoped
-    @Provides
     fun provideHeadlinesRepository(dataSource: HeadlinesDataSource): HeadlinesRepository = HeadlinesRepository(dataSource)
 
     @ViewModelScoped
