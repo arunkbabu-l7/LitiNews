@@ -10,12 +10,14 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import com.litmus7.news.R
 import com.litmus7.news.databinding.ActivityHeadlinesBinding
 import com.litmus7.news.ui.fragment.HeadlinesFragment
 import com.litmus7.news.util.NetworkUtils
 import com.litmus7.news.util.NewsEvent
 import com.litmus7.news.viewmodel.HeadlinesViewModel
+import kotlinx.coroutines.launch
 
 class HeadlinesActivity : BaseActivity() {
     private lateinit var binding: ActivityHeadlinesBinding
@@ -83,28 +85,34 @@ class HeadlinesActivity : BaseActivity() {
             showError(getString(R.string.err_no_internet))
         }
 
-        viewModel.allNews.observe(this) { newsEvent ->
-            when(newsEvent) {
-                is NewsEvent.Success -> {
-                    Log.i(tag, "Success")
-                    hideProgressCircle()
-                    binding.fragmentContainerView.isVisible = true
-                    val fragment = fragManager.findFragmentByTag(HeadlinesFragment.FRAGMENT_TAG) as HeadlinesFragment?
-                    fragment?.onDataLoaded(newsEvent.articles)
-                }
-                is NewsEvent.Failure -> {
-                    Log.i(tag, "Failure")
-                    showError(newsEvent.errorText)
-                }
-                is NewsEvent.Empty -> {
-                    Log.i(tag, "Empty")
-                }
-                is NewsEvent.Loading -> {
-                    Log.i(tag, "Loading")
-                    binding.fragmentContainerView.isVisible = false
-                    showProgressCircle()
+        lifecycleScope.launch {
+            viewModel.allNews.collect { newsEvent ->
+                when(newsEvent) {
+                    is NewsEvent.Success -> {
+                        Log.i(tag, "Success")
+                        hideProgressCircle()
+                        binding.fragmentContainerView.isVisible = true
+                        val fragment = fragManager.findFragmentByTag(HeadlinesFragment.FRAGMENT_TAG) as HeadlinesFragment?
+                        fragment?.onDataLoaded(newsEvent.articles)
+                    }
+                    is NewsEvent.Failure -> {
+                        Log.i(tag, "Failure")
+                        showError(newsEvent.errorText)
+                    }
+                    is NewsEvent.Empty -> {
+                        Log.i(tag, "Empty")
+                    }
+                    is NewsEvent.Loading -> {
+                        Log.i(tag, "Loading")
+                        binding.fragmentContainerView.isVisible = false
+                        showProgressCircle()
+                    }
                 }
             }
+        }
+
+        viewModel.allNews.observe(this) { newsEvent ->
+
         }
     }
 
