@@ -23,7 +23,6 @@ class HeadlinesFragment : Fragment() {
 
     companion object {
         const val FRAGMENT_TAG = "news_topic_fragment_tag"
-        private const val SCROLL_STATE_SAVE_INSTANCE_KEY = "key_save_instance_scroll_state"
         private val TAG: String = HeadlinesFragment::class.java.simpleName
         private var scrollState: Int = 0
     }
