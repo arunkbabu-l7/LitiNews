@@ -12,3 +12,5 @@ const val NEWS_SOURCE_NAME_KEY = "key_news_source_name"
 const val NEWS_TITLE_KEY =  "key_news_title"
 const val NEWS_URL_KEY = "key_news_url"
 const val NEWS_IMAGE_URL_KEY = "key_news_image_url"
+
+const val DEFAULT_ERROR_MESSAGE = "Unable to Fetch News! Please Try again"

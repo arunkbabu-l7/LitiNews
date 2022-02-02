@@ -7,6 +7,7 @@ import com.litmus7.news.repository.HeadlinesRepository
 import com.litmus7.news.util.NewsEvent
 import com.litmus7.news.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -20,6 +21,10 @@ class HeadlinesViewModel @Inject constructor(
         private set
     private val tag = HeadlinesViewModel::class.simpleName
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        Log.e(tag,"Message: ${throwable.message} :: Cause: ${throwable.cause}")
+    }
+
     fun fetchTopHeadlines(country: String = "in") {
         Log.d(tag, "fetchTopHeadlines()")
         Log.d(tag, "LOCK: $LOCK")
@@ -28,26 +33,30 @@ class HeadlinesViewModel @Inject constructor(
 
         LOCK = true
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val newsFlow: Flow<Result<NewsResponse>> = repository.getTopHeadlines(country)
-            allNews = newsFlow.map { newsResult ->
-                when(newsResult) {
-                    is Result.Success -> {
-                        Log.d(tag, "fetchTopHeadlines::onSuccess()")
-                        LOCK = false
-                        NewsEvent.Success(newsResult.data.articles)
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            try {
+                val newsFlow: Flow<Result<NewsResponse>> = repository.getTopHeadlines(country)
+                allNews = newsFlow.map { newsResult ->
+                    when(newsResult) {
+                        is Result.Success -> {
+                            Log.d(tag, "fetchTopHeadlines::onSuccess()")
+                            LOCK = false
+                            NewsEvent.Success(newsResult.data.articles)
+                        }
+                        is Result.Error -> {
+                            Log.d(tag, "fetchTopHeadlines::onFailure()")
+                            LOCK = false
+                            NewsEvent.Failure(newsResult.exception.message.toString())
+                        }
                     }
-                    is Result.Error -> {
-                        Log.d(tag, "fetchTopHeadlines::onFailure()")
-                        LOCK = false
-                        NewsEvent.Failure(newsResult.exception.message.toString())
-                    }
-                }
-            }.stateIn(
-                initialValue = NewsEvent.Loading,
-                scope = this,
-                started = SharingStarted.WhileSubscribed(5000)
-            )
+                }.stateIn(
+                    initialValue = NewsEvent.Loading,
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5000)
+                )
+            } catch (e: Throwable) {
+
+            }
         }
     }
 }

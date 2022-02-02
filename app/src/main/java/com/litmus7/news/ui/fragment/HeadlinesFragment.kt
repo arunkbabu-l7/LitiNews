@@ -17,7 +17,6 @@ import com.litmus7.news.util.*
 class HeadlinesFragment : Fragment() {
     private var _binding: FragmentHeadlinesBinding? = null
     private val binding get() = _binding!!
-    private val newsSet: MutableSet<Article> = mutableSetOf()
     private var adapter: NewsAdapter? = null
 
     companion object {
@@ -33,7 +32,7 @@ class HeadlinesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = NewsAdapter(newsSet)
+        adapter = NewsAdapter()
         binding.rvNewsByTopic.adapter = adapter
         binding.rvNewsByTopic.setHasFixedSize(true)
 
@@ -59,8 +58,7 @@ class HeadlinesFragment : Fragment() {
     fun onDataLoaded(newsArticles: List<Article>) {
         // Initialize Recycler View
         Log.d(TAG, "onDataLoaded():: ${newsArticles.size}")
-        newsSet.addAll(newsArticles)
-        adapter?.notifyItemRangeChanged(0, newsSet.size)
+        adapter?.submitList(newsArticles)
         (activity as HeadlinesActivity).hasData = newsArticles.isNotEmpty()
     }
 

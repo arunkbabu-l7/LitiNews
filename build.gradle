@@ -6,6 +6,7 @@ buildscript {
         lifecycle_version = "2.4.0"
         nav_version = "2.4.0"
         glide_version = "4.12.0"
+        room_version = "2.4.1"
     }
 
     repositories {

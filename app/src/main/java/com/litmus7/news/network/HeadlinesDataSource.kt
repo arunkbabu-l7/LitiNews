@@ -3,10 +3,12 @@ package com.litmus7.news.network
 import android.util.Log
 import com.litmus7.news.domain.NewsResponse
 import com.litmus7.news.exception.NewsFetchException
+import com.litmus7.news.util.DEFAULT_ERROR_MESSAGE
 import com.litmus7.news.util.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class HeadlinesDataSource @Inject constructor(private val newsApi: NewsApi) {
@@ -15,12 +17,20 @@ class HeadlinesDataSource @Inject constructor(private val newsApi: NewsApi) {
     suspend fun getTopHeadlines(country: String): Flow<Result<NewsResponse>> = flow {
         Log.d(tag, "HeadlinesDataSource#getTopHeadlines()")
         // Producer Block
-        val response: Response<NewsResponse> = newsApi.getTopHeadlines(country)
-        val result = response.body()
-        if (response.isSuccessful && result != null) {
-            emit(Result.Success(result))
-        } else {
-            emit(Result.Error(NewsFetchException("Unable to Fetch News! Please Try again")))
+        try {
+            val response: Response<NewsResponse> = newsApi.getTopHeadlines(country)
+            val result = response.body()
+            if (response.isSuccessful && result != null) {
+                emit(Result.Success(result))
+            } else {
+                emit(Result.Error(NewsFetchException(DEFAULT_ERROR_MESSAGE)))
+            }
+        } catch (e: Throwable) {
+            if (e is UnknownHostException) {
+                emit(Result.Error(NewsFetchException("Unable to Connect to Server! Please check your internet connection & try again!")))
+            } else {
+                emit(Result.Error(NewsFetchException(DEFAULT_ERROR_MESSAGE)))
+            }
         }
     }
 }

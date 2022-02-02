@@ -78,13 +78,8 @@ class HeadlinesActivity : BaseActivity() {
             hasData = savedInstanceState.getBoolean(HAS_DATA_SAVE_INSTANCE_KEY)
         }
 
-        // Check for network connectivity before loading data
-        if (checkNetwork.isInternetAvailable(this)) {
-            if (!hasData) {
-                viewModel.fetchTopHeadlines()
-            }
-        } else {
-            showError(getString(R.string.err_no_internet))
+        if (!hasData) {
+            viewModel.fetchTopHeadlines()
         }
 
         lifecycleScope.launch {
@@ -104,7 +99,6 @@ class HeadlinesActivity : BaseActivity() {
                         }
                         is NewsEvent.Empty -> {
                             Log.i(tag, "Empty")
-                            showError(getString(R.string.err_news_empty))
                         }
                         is NewsEvent.Loading -> {
                             Log.i(tag, "Loading")
