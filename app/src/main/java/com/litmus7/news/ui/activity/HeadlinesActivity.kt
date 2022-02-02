@@ -16,10 +16,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.litmus7.news.R
 import com.litmus7.news.databinding.ActivityHeadlinesBinding
 import com.litmus7.news.ui.fragment.HeadlinesFragment
-import com.litmus7.news.util.NetworkUtils
 import com.litmus7.news.util.NewsEvent
 import com.litmus7.news.viewmodel.HeadlinesViewModel
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.concurrent.timerTask
 
 class HeadlinesActivity : BaseActivity() {
     private lateinit var binding: ActivityHeadlinesBinding
@@ -34,17 +35,18 @@ class HeadlinesActivity : BaseActivity() {
     // Network Callback
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
-            super.onAvailable(network)
             Log.d(tag, "onAvailable()")
-            runOnUiThread {
-                if (!hasData) {
-                    viewModel.fetchTopHeadlines()
+            Timer().schedule(timerTask {
+                runOnUiThread {
+                    if (!hasData) {
+                        viewModel.fetchTopHeadlines()
+                        collectNews()
+                    }
                 }
-            }
+            }, 1000)
         }
 
         override fun onLost(network: Network) {
-            super.onLost(network)
             Log.d(tag, "onLost()")
             runOnUiThread {
                 if (!hasData) {
@@ -62,15 +64,13 @@ class HeadlinesActivity : BaseActivity() {
         setContentView(binding.root)
 
         // Register Network Callback
-        val checkNetwork = NetworkUtils()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             cm.registerDefaultNetworkCallback(networkCallback)
         }
 
-        val fragManager = supportFragmentManager
         if (savedInstanceState == null) {
-            fragManager.commit {
+            supportFragmentManager.commit {
                 setReorderingAllowed(true)
                 add<HeadlinesFragment>(R.id.fragment_container_view, HeadlinesFragment.FRAGMENT_TAG)
             }
@@ -82,6 +82,10 @@ class HeadlinesActivity : BaseActivity() {
             viewModel.fetchTopHeadlines()
         }
 
+        collectNews()
+    }
+
+    private fun collectNews() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.allNews.collect { newsEvent ->
@@ -90,7 +94,7 @@ class HeadlinesActivity : BaseActivity() {
                             Log.i(tag, "Success")
                             hideProgressCircle()
                             binding.fragmentContainerView.isVisible = true
-                            val fragment = fragManager.findFragmentByTag(HeadlinesFragment.FRAGMENT_TAG) as HeadlinesFragment?
+                            val fragment = supportFragmentManager.findFragmentByTag(HeadlinesFragment.FRAGMENT_TAG) as HeadlinesFragment?
                             fragment?.onDataLoaded(newsEvent.articles)
                         }
                         is NewsEvent.Failure -> {
