@@ -29,29 +29,25 @@ class HeadlinesViewModel @Inject constructor(
         LOCK = true
 
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val newsFlow: Flow<Result<NewsResponse>> = repository.getTopHeadlines(country)
-                allNews = newsFlow.map { newsResult ->
-                    when(newsResult) {
-                        is Result.Success -> {
-                            Log.d(tag, "fetchTopHeadlines::onSuccess()")
-                            LOCK = false
-                            NewsEvent.Success(newsResult.data.articles)
-                        }
-                        is Result.Error -> {
-                            Log.d(tag, "fetchTopHeadlines::onFailure()")
-                            LOCK = false
-                            NewsEvent.Failure(newsResult.exception.message.toString())
-                        }
+            val newsFlow: Flow<Result<NewsResponse>> = repository.getTopHeadlines(country)
+            allNews = newsFlow.map { newsResult ->
+                when (newsResult) {
+                    is Result.Success -> {
+                        Log.d(tag, "fetchTopHeadlines::onSuccess()")
+                        LOCK = false
+                        NewsEvent.Success(newsResult.data.articles)
                     }
-                }.stateIn(
-                    initialValue = NewsEvent.Loading,
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5000)
-                )
-            } catch (e: Throwable) {
-
-            }
+                    is Result.Error -> {
+                        Log.d(tag, "fetchTopHeadlines::onFailure()")
+                        LOCK = false
+                        NewsEvent.Failure(newsResult.exception.message.toString())
+                    }
+                }
+            }.stateIn(
+                initialValue = NewsEvent.Loading,
+                scope = viewModelScope,
+                started = SharingStarted.Lazily
+            )
         }
     }
 }
