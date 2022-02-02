@@ -9,7 +9,7 @@ import com.litmus7.news.databinding.ItemNewsBinding
 import com.litmus7.news.domain.Article
 import javax.annotation.Nullable
 
-class NewsAdapter(private val newsList: List<Article>) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+class NewsAdapter(private val newsList: Set<Article>) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
     private val tag = NewsAdapter::class.java.simpleName
     private var itemClickListener: OnItemClickListener? = null
     private var setOnItemClickListener: ((Article, Int) -> Unit)? = null
@@ -23,7 +23,7 @@ class NewsAdapter(private val newsList: List<Article>) : RecyclerView.Adapter<Ne
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        val article: Article = newsList[position]
+        val article: Article = newsList.elementAt(position)
         holder.binding.article = article
         holder.binding.executePendingBindings()
         holder.bind(article)

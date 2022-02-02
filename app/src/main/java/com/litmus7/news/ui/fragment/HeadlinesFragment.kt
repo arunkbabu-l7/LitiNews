@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.litmus7.news.databinding.FragmentHeadlinesBinding
 import com.litmus7.news.domain.Article
-import com.litmus7.news.network.hasNewData
 import com.litmus7.news.ui.activity.DetailsActivity
 import com.litmus7.news.ui.activity.HeadlinesActivity
 import com.litmus7.news.ui.adapter.NewsAdapter
@@ -18,7 +17,7 @@ import com.litmus7.news.util.*
 class HeadlinesFragment : Fragment() {
     private var _binding: FragmentHeadlinesBinding? = null
     private val binding get() = _binding!!
-    private val newsList: ArrayList<Article> = arrayListOf()
+    private val newsSet: MutableSet<Article> = mutableSetOf()
     private var adapter: NewsAdapter? = null
 
     companion object {
@@ -34,7 +33,7 @@ class HeadlinesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = NewsAdapter(newsList)
+        adapter = NewsAdapter(newsSet)
         binding.rvNewsByTopic.adapter = adapter
         binding.rvNewsByTopic.setHasFixedSize(true)
 
@@ -59,17 +58,10 @@ class HeadlinesFragment : Fragment() {
 
     fun onDataLoaded(newsArticles: List<Article>) {
         // Initialize Recycler View
-        if (hasNewData) {
-            Log.d(TAG, "onDataLoaded():: ${newsArticles.size}")
-            hasNewData = false
-
-            val oldSize = newsList.size
-            newsList.clear()
-            adapter?.notifyItemRangeRemoved(0, oldSize)
-            newsList.addAll(newsArticles)
-            adapter?.notifyItemRangeInserted(0, newsArticles.size)
-            (activity as HeadlinesActivity).hasData = newsArticles.isNotEmpty()
-        }
+        Log.d(TAG, "onDataLoaded():: ${newsArticles.size}")
+        newsSet.addAll(newsArticles)
+        adapter?.notifyItemRangeChanged(0, newsSet.size)
+        (activity as HeadlinesActivity).hasData = newsArticles.isNotEmpty()
     }
 
     override fun onDestroyView() {

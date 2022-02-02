@@ -15,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.litmus7.news.R
 import com.litmus7.news.databinding.ActivityHeadlinesBinding
-import com.litmus7.news.network.hasNewData
 import com.litmus7.news.ui.fragment.HeadlinesFragment
 import com.litmus7.news.util.NetworkUtils
 import com.litmus7.news.util.NewsEvent
@@ -29,7 +28,7 @@ class HeadlinesActivity : BaseActivity() {
     var hasData = false
 
     companion object {
-        private const val HAS_DATA_SAVE_INSTANCE_KEY = "has_data_save_instance_key"
+        private const val HAS_DATA_SAVE_INSTANCE_KEY = "key_has_data_save_instance"
     }
 
     // Network Callback
@@ -61,8 +60,6 @@ class HeadlinesActivity : BaseActivity() {
         progressBar = binding.progressBar
         errorLayout = binding.errorLayout.root
         setContentView(binding.root)
-
-        hasNewData = true
 
         // Register Network Callback
         val checkNetwork = NetworkUtils()
