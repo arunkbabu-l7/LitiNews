@@ -11,10 +11,6 @@ class NewsDbDataSource @Inject constructor(private val dao: NewsDao) {
         dao.insertArticle(article)
     }
 
-    suspend fun deleteArticle(article: Article) {
-        dao.deleteArticle(article)
-    }
-
     suspend fun deleteAllArticles() {
         dao.deleteAllArticles()
     }

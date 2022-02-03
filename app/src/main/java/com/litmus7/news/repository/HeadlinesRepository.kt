@@ -50,7 +50,7 @@ class HeadlinesRepository @Inject constructor(
             if (articles.isNotEmpty()) {
                 Result.Success(articles.toCachedNewsResponse())
             } else {
-                Result.Error(NewsFetchException("Database is empty"))
+                Result.Error(NewsFetchException("Nothing Here!\nPlease connect to internet to fetch the latest news"))
             }
         }.first()
     }
