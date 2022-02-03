@@ -3,6 +3,7 @@ package com.litmus7.news.util
 const val BASE_URL = "https://newsapi.org"
 const val NEWS_BUNDLE_EXTRAS_KEY = "key-news-article-intent-extras"
 
+const val NEWS_AUTHOR_ID = "key_news_id"
 const val NEWS_AUTHOR_KEY = "key_news_author"
 const val NEWS_CONTENT_KEY = "key_news_content"
 const val NEWS_DESCRIPTION_KEY = "key_news_desc"

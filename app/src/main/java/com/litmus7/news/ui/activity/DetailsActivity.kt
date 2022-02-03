@@ -19,6 +19,7 @@ class DetailsActivity : BaseActivity() {
 
         val articleBundle = intent?.getBundleExtra(NEWS_BUNDLE_EXTRAS_KEY)
         articleBundle?.let { b ->
+            val id = b.getInt(NEWS_AUTHOR_ID)
             val author = b.getString(NEWS_AUTHOR_KEY) ?: ""
             val content = b.getString(NEWS_CONTENT_KEY) ?: ""
             val description = b.getString(NEWS_DESCRIPTION_KEY) ?: ""
@@ -30,6 +31,7 @@ class DetailsActivity : BaseActivity() {
             val urlToImage = b.getString(NEWS_IMAGE_URL_KEY) ?: ""
 
             binding.article = Article(
+                articleId = id,
                 author = author,
                 content = content,
                 description = description,

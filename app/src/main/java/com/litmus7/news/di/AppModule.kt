@@ -1,5 +1,6 @@
 package com.litmus7.news.di
 
+import com.litmus7.news.database.NewsDbDataSource
 import com.litmus7.news.network.HeadlinesDataSource
 import com.litmus7.news.repository.HeadlinesRepository
 import dagger.Module
@@ -14,5 +15,8 @@ object AppModule {
 
     @ViewModelScoped
     @Provides
-    fun provideHeadlinesRepository(dataSource: HeadlinesDataSource): HeadlinesRepository = HeadlinesRepository(dataSource)
+    fun provideHeadlinesRepository(
+        dataSource: HeadlinesDataSource,
+        dbDataSource: NewsDbDataSource
+    ) = HeadlinesRepository(dataSource, dbDataSource)
 }

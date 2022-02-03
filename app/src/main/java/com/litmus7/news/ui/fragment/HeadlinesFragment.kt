@@ -45,6 +45,7 @@ class HeadlinesFragment : Fragment() {
             // Launch DetailsActivity
             val newsDetailsActivityIntent = Intent(activity, DetailsActivity::class.java).apply {
                 val bundle = Bundle().apply {
+                    putInt(NEWS_AUTHOR_ID, article.articleId)
                     putString(NEWS_AUTHOR_KEY, article.author)
                     putString(NEWS_CONTENT_KEY, article.content)
                     putString(NEWS_DESCRIPTION_KEY, article.description)
