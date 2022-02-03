@@ -16,6 +16,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.litmus7.news.R
 import com.litmus7.news.databinding.ActivityHeadlinesBinding
 import com.litmus7.news.ui.fragment.HeadlinesFragment
+import com.litmus7.news.util.NetworkUtils
 import com.litmus7.news.util.NewsEvent
 import com.litmus7.news.viewmodel.HeadlinesViewModel
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ class HeadlinesActivity : BaseActivity() {
     private lateinit var binding: ActivityHeadlinesBinding
     private val tag = HeadlinesActivity::class.java.simpleName
     private val viewModel: HeadlinesViewModel by viewModels()
-    var hasData = false
+    var hasNewData = false
 
     companion object {
         private const val HAS_DATA_SAVE_INSTANCE_KEY = "key_has_data_save_instance"
@@ -36,20 +37,24 @@ class HeadlinesActivity : BaseActivity() {
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             Log.d(tag, "onAvailable()")
+            NetworkUtils.isInternetConnected = true
+
             Timer().schedule(timerTask {
                 runOnUiThread {
-                    if (!hasData) {
+                    if (!hasNewData) {
                         viewModel.fetchTopHeadlines()
                         collectNews()
                     }
                 }
-            }, 1000)
+            }, 1500)
         }
 
         override fun onLost(network: Network) {
             Log.d(tag, "onLost()")
+            NetworkUtils.isInternetConnected = false
+
             runOnUiThread {
-                if (!hasData) {
+                if (!hasNewData) {
                     showError(getString(R.string.err_no_internet))
                 }
             }
@@ -75,10 +80,10 @@ class HeadlinesActivity : BaseActivity() {
                 add<HeadlinesFragment>(R.id.fragment_container_view, HeadlinesFragment.FRAGMENT_TAG)
             }
         } else {
-            hasData = savedInstanceState.getBoolean(HAS_DATA_SAVE_INSTANCE_KEY)
+            hasNewData = savedInstanceState.getBoolean(HAS_DATA_SAVE_INSTANCE_KEY)
         }
 
-        if (!hasData) {
+        if (!hasNewData) {
             viewModel.fetchTopHeadlines()
         }
 
@@ -95,7 +100,7 @@ class HeadlinesActivity : BaseActivity() {
                             hideProgressCircle()
                             binding.fragmentContainerView.isVisible = true
                             val fragment = supportFragmentManager.findFragmentByTag(HeadlinesFragment.FRAGMENT_TAG) as HeadlinesFragment?
-                            fragment?.onDataLoaded(newsEvent.articles)
+                            fragment?.onDataLoaded(newsEvent.newsResponse)
                         }
                         is NewsEvent.Failure -> {
                             Log.i(tag, "Failure")
@@ -116,7 +121,7 @@ class HeadlinesActivity : BaseActivity() {
     }
 
     private fun showError(msg: String) {
-        if (!hasData) {
+        if (!hasNewData) {
             val isVisible = true
             binding.errorLayout.root.isVisible = isVisible
             binding.progressBar.isVisible = !isVisible
@@ -127,6 +132,6 @@ class HeadlinesActivity : BaseActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(HAS_DATA_SAVE_INSTANCE_KEY, hasData)
+        outState.putBoolean(HAS_DATA_SAVE_INSTANCE_KEY, hasNewData)
     }
 }

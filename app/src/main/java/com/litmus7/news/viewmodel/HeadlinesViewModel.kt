@@ -35,7 +35,7 @@ class HeadlinesViewModel @Inject constructor(
                     is Result.Success -> {
                         Log.d(tag, "fetchTopHeadlines::onSuccess()")
                         LOCK = false
-                        NewsEvent.Success(newsResult.data.articles)
+                        NewsEvent.Success(newsResult.data)
                     }
                     is Result.Error -> {
                         Log.d(tag, "fetchTopHeadlines::onFailure()")

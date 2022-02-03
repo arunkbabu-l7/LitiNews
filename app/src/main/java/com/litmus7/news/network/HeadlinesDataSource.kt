@@ -25,12 +25,8 @@ class HeadlinesDataSource @Inject constructor(private val newsApi: NewsApi) {
             } else {
                 emit(Result.Error(NewsFetchException(DEFAULT_ERROR_MESSAGE)))
             }
-        } catch (e: Throwable) {
-            if (e is UnknownHostException) {
-                emit(Result.Error(NewsFetchException("Unable to Connect to Server! Please check your internet connection & try again!")))
-            } else {
-                emit(Result.Error(NewsFetchException(DEFAULT_ERROR_MESSAGE)))
-            }
+        } catch (e: UnknownHostException) {
+            emit(Result.Error(NewsFetchException("Unable to Connect to Server! Please check your internet connection & try again!")))
         }
     }
 }

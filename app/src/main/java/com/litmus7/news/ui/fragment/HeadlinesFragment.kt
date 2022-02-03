@@ -7,9 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.litmus7.news.databinding.FragmentHeadlinesBinding
-import com.litmus7.news.domain.Article
+import com.litmus7.news.domain.NewsResponse
 import com.litmus7.news.ui.activity.DetailsActivity
 import com.litmus7.news.ui.activity.HeadlinesActivity
 import com.litmus7.news.ui.adapter.NewsAdapter
@@ -19,12 +18,10 @@ class HeadlinesFragment : Fragment() {
     private var _binding: FragmentHeadlinesBinding? = null
     private val binding get() = _binding!!
     private var adapter: NewsAdapter? = null
-    private var layoutManager: LinearLayoutManager? = null
 
     companion object {
         const val FRAGMENT_TAG = "news_topic_fragment_tag"
         private val TAG: String = HeadlinesFragment::class.java.simpleName
-        private var scrollState: Int = 0
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -36,16 +33,14 @@ class HeadlinesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = NewsAdapter()
-        layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.rvNewsByTopic.adapter = adapter
-        binding.rvNewsByTopic.layoutManager = layoutManager
         binding.rvNewsByTopic.setHasFixedSize(true)
 
         adapter?.setOnItemClickListener { article, _ ->
             // Launch DetailsActivity
             val newsDetailsActivityIntent = Intent(activity, DetailsActivity::class.java).apply {
                 val bundle = Bundle().apply {
-                    putInt(NEWS_AUTHOR_ID, article.articleId)
+                    putInt(NEWS_AUTHOR_ID, article.id)
                     putString(NEWS_AUTHOR_KEY, article.author)
                     putString(NEWS_CONTENT_KEY, article.content)
                     putString(NEWS_DESCRIPTION_KEY, article.description)
@@ -61,15 +56,16 @@ class HeadlinesFragment : Fragment() {
         }
     }
 
-    fun onDataLoaded(newsArticles: List<Article>) {
+    fun onDataLoaded(newsResponse: NewsResponse) {
         // Initialize Recycler View
+        val newsArticles = newsResponse.articles
         Log.d(TAG, "onDataLoaded():: ${newsArticles.size}")
-        val a = (activity as HeadlinesActivity)
-        scrollState = layoutManager?.findFirstCompletelyVisibleItemPosition() ?: 0
-        adapter?.submitList(newsArticles) {
-            binding.rvNewsByTopic.scrollToPosition(scrollState)
+
+        adapter?.submitList(newsArticles)
+        if (newsResponse.status == NewsResponse.STATUS_OK) {
+            // hasNewData = True, if and only if the data is fetched from network and is not empty; False otherwise
+            (activity as HeadlinesActivity).hasNewData = newsArticles.isNotEmpty()
         }
-        a.hasData = newsArticles.isNotEmpty()
     }
 
     override fun onDestroyView() {

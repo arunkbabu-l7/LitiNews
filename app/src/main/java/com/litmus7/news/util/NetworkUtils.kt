@@ -6,6 +6,10 @@ import android.net.NetworkCapabilities
 import android.os.Build
 
 class NetworkUtils {
+    companion object {
+        var isInternetConnected = false
+    }
+
     /**
      * Checks whether Internet Connection is available
      * @param context The application Context
@@ -22,6 +26,7 @@ class NetworkUtils {
         } else {
             isConnected = cm.activeNetworkInfo?.isConnected ?: false
         }
+        isInternetConnected = isConnected
         return isConnected
     }
 }

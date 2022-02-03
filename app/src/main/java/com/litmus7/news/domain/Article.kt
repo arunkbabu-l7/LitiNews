@@ -11,14 +11,27 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "article")
 data class Article(
-    @PrimaryKey(autoGenerate = true) val articleId: Int,
-    val author: String,
-    val content: String,
-    val description: String,
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val author: String?,
+    val content: String?,
+    val description: String?,
     val publishedAt: String,
     @Ignore val cleanPublishDate: String = publishedAt.toCleanDate(),
     @Embedded val source: Source,
     val title: String,
     val url: String,
-    val urlToImage: String
-) : Parcelable
+    val urlToImage: String?
+) : Parcelable {
+
+    constructor(
+        id: Int,
+        author: String?,
+        content: String?,
+        description: String?,
+        publishedAt: String,
+        source: Source,
+        title: String,
+        url: String,
+        urlToImage: String?
+    ): this(id, author, content, description, publishedAt, publishedAt.toCleanDate(), source, title, url, urlToImage)
+}

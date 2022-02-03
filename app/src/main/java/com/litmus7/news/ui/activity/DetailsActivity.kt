@@ -31,7 +31,7 @@ class DetailsActivity : BaseActivity() {
             val urlToImage = b.getString(NEWS_IMAGE_URL_KEY) ?: ""
 
             binding.article = Article(
-                articleId = id,
+                id = id,
                 author = author,
                 content = content,
                 description = description,

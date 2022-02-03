@@ -6,12 +6,10 @@ import com.litmus7.news.domain.Article
 import com.litmus7.news.domain.NewsResponse
 import com.litmus7.news.exception.NewsFetchException
 import com.litmus7.news.network.HeadlinesDataSource
+import com.litmus7.news.util.NetworkUtils
 import com.litmus7.news.util.Result
 import com.litmus7.news.util.toCachedNewsResponse
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class HeadlinesRepository @Inject constructor(
@@ -23,22 +21,44 @@ class HeadlinesRepository @Inject constructor(
     suspend fun getTopHeadlines(country: String): Flow<Result<NewsResponse>> = flow {
         Log.d(tag, "getTopHeadlines()")
 
-        newsDbDataSource.allArticles.collect { articles ->
-            emit(Result.Success(articles.toCachedNewsResponse()))
-        }
-
-        val news = newsDataSource.getTopHeadlines(country)
-        news.onEach {
-            emit(it)
-            if (it is Result.Success) {
-                saveInCache(it.data.articles)
-            }
-        }.catch { e ->
-            emit(Result.Error(NewsFetchException(e.message.toString())))
+        if (NetworkUtils.isInternetConnected) {
+            emit(loadFromNetwork(country))
+        } else {
+            emit(loadFromLocal())
         }
     }
 
+    private suspend fun loadFromNetwork(country: String): Result<NewsResponse> {
+        return newsDataSource.getTopHeadlines(country)
+            .onEach {
+                Log.d(tag, "news.onEach()")
+                if (it is Result.Success) {
+                    Log.d(tag, "news.onEach()::Result.Success")
+                    saveInCache(it.data.articles)
+                }
+
+            }.catch { e ->
+                Log.d(tag, ".catch() -- Error: $e")
+                Result.Error(NewsFetchException(e.message.toString()))
+                e.printStackTrace()
+            }.first()
+    }
+
+    private suspend fun loadFromLocal(): Result<NewsResponse> {
+        return newsDbDataSource.allArticles.map { articles ->
+            Log.d(tag, "Db Data Loaded")
+            if (articles.isNotEmpty()) {
+                Result.Success(articles.toCachedNewsResponse())
+            } else {
+                Result.Error(NewsFetchException("Database is empty"))
+            }
+        }.first()
+    }
+
     private suspend fun saveInCache(articles: List<Article>) {
+        Log.d(tag, "saveInCache()  :: Size: ${articles.size}")
+        newsDbDataSource.deleteAllArticles()
+
         articles.forEach { article ->
             newsDbDataSource.insertArticle(article)
         }
