@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.litmus7.common.domain.NewsResponse
+import com.litmus7.common.util.*
 import com.litmus7.news.databinding.FragmentHeadlinesBinding
-import com.litmus7.news.domain.NewsResponse
 import com.litmus7.news.ui.activity.DetailsActivity
 import com.litmus7.news.ui.activity.HeadlinesActivity
 import com.litmus7.news.ui.adapter.NewsAdapter
-import com.litmus7.news.util.*
 
 class HeadlinesFragment : Fragment() {
     private var _binding: FragmentHeadlinesBinding? = null
@@ -33,8 +33,10 @@ class HeadlinesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = NewsAdapter()
-        binding.rvNewsByTopic.adapter = adapter
-        binding.rvNewsByTopic.setHasFixedSize(true)
+        with(binding) {
+            rvNewsByTopic.adapter = adapter
+            rvNewsByTopic.setHasFixedSize(true)
+        }
 
         adapter?.setOnItemClickListener { article, _ ->
             // Launch DetailsActivity

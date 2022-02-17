@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="article" type="com.litmus7.news.domain.Article" />
+        <variable name="article" type="com.litmus7.common.domain.Article" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

@@ -1,10 +1,10 @@
-package com.litmus7.news.network
+package com.litmus7.common.network
 
 import android.util.Log
-import com.litmus7.news.domain.NewsResponse
-import com.litmus7.news.exception.NewsFetchException
-import com.litmus7.news.util.DEFAULT_ERROR_MESSAGE
-import com.litmus7.news.util.Result
+import com.litmus7.common.domain.NewsResponse
+import com.litmus7.common.exception.NewsFetchException
+import com.litmus7.common.util.DEFAULT_ERROR_MESSAGE
+import com.litmus7.common.util.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response

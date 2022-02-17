@@ -1,4 +1,4 @@
-package com.litmus7.news.exception
+package com.litmus7.common.exception
 
 class NewsFetchException : Exception {
 

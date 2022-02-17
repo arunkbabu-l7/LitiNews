@@ -1,6 +1,6 @@
-package com.litmus7.news.network
+package com.litmus7.common.network
 
-import com.litmus7.news.domain.NewsResponse
+import com.litmus7.common.domain.NewsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

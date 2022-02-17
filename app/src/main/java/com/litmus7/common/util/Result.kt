@@ -1,4 +1,4 @@
-package com.litmus7.news.util
+package com.litmus7.common.util
 
 sealed class Result<out R> {
     class Success<out T>(val data: T): Result<T>()

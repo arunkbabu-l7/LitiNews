@@ -1,6 +1,6 @@
 package com.litmus7.news.database
 
-import com.litmus7.news.domain.Article
+import com.litmus7.common.domain.Article
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

@@ -1,8 +1,8 @@
-package com.litmus7.news.di
+package com.litmus7.common.di
 
+import com.litmus7.common.network.NewsApi
+import com.litmus7.common.util.BASE_URL
 import com.litmus7.news.BuildConfig
-import com.litmus7.news.network.NewsApi
-import com.litmus7.news.util.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,15 +24,19 @@ object ApiModule {
         val client = OkHttpClient.Builder()
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        client.addInterceptor(loggingInterceptor)
-        client.addNetworkInterceptor { chain ->
-            val originalRequest: Request = chain.request()
-            val newRequest: Request = originalRequest.newBuilder()
-                .header("X-Api-Key", BuildConfig.API_KEY)
-                .build()
 
-            chain.proceed(newRequest)
+        client.apply {
+            addInterceptor(loggingInterceptor)
+            addNetworkInterceptor { chain ->
+                val originalRequest: Request = chain.request()
+                val newRequest: Request = originalRequest.newBuilder()
+                    .header("X-Api-Key", BuildConfig.API_KEY)
+                    .build()
+
+                chain.proceed(newRequest)
+            }
         }
+
         return client.build()
     }
 

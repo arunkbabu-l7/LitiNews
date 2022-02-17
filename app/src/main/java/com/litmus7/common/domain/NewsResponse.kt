@@ -1,4 +1,4 @@
-package com.litmus7.news.domain
+package com.litmus7.common.domain
 
 data class NewsResponse(
     val articles: List<Article>,

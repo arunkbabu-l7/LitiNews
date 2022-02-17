@@ -2,10 +2,10 @@ package com.litmus7.news.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.litmus7.news.domain.NewsResponse
+import com.litmus7.common.domain.NewsResponse
+import com.litmus7.common.util.NewsEvent
+import com.litmus7.common.util.Result
 import com.litmus7.news.repository.HeadlinesRepository
-import com.litmus7.news.util.NewsEvent
-import com.litmus7.news.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

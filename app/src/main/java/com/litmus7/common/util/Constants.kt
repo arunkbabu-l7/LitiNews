@@ -1,4 +1,4 @@
-package com.litmus7.news.util
+package com.litmus7.common.util
 
 const val BASE_URL = "https://newsapi.org"
 const val NEWS_BUNDLE_EXTRAS_KEY = "key-news-article-intent-extras"

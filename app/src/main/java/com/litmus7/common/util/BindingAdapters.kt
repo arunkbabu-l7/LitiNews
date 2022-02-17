@@ -1,4 +1,4 @@
-package com.litmus7.news.util
+package com.litmus7.common.util
 
 import android.text.SpannableString
 import android.text.style.UnderlineSpan

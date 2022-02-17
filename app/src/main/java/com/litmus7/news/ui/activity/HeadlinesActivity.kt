@@ -13,11 +13,11 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.litmus7.common.util.NetworkUtils
+import com.litmus7.common.util.NewsEvent
 import com.litmus7.news.R
 import com.litmus7.news.databinding.ActivityHeadlinesBinding
 import com.litmus7.news.ui.fragment.HeadlinesFragment
-import com.litmus7.news.util.NetworkUtils
-import com.litmus7.news.util.NewsEvent
 import com.litmus7.news.viewmodel.HeadlinesViewModel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -64,9 +64,11 @@ class HeadlinesActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHeadlinesBinding.inflate(layoutInflater)
-        progressBar = binding.progressBar
-        errorLayout = binding.errorLayout.root
-        setContentView(binding.root)
+        with(binding) {
+            this@HeadlinesActivity.progressBar = progressBar
+            this@HeadlinesActivity.errorLayout = layoutError.root
+            setContentView(root)
+        }
 
         // Register Network Callback
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -123,10 +125,12 @@ class HeadlinesActivity : BaseActivity() {
     private fun showError(msg: String) {
         if (!hasNewData) {
             val isVisible = true
-            binding.errorLayout.root.isVisible = isVisible
-            binding.progressBar.isVisible = !isVisible
-            binding.fragmentContainerView.isVisible = !isVisible
-            binding.errorLayout.tvErrorText.text = msg
+            with(binding) {
+                layoutError.root.isVisible = isVisible
+                progressBar.isVisible = !isVisible
+                fragmentContainerView.isVisible = !isVisible
+                layoutError.tvErrorText.text = msg
+            }
         }
     }
 

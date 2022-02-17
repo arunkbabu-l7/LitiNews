@@ -1,7 +1,7 @@
-package com.litmus7.news.util
+package com.litmus7.common.util
 
-import com.litmus7.news.domain.Article
-import com.litmus7.news.domain.NewsResponse
+import com.litmus7.common.domain.Article
+import com.litmus7.common.domain.NewsResponse
 
 fun String.toCleanDate(): String {
     val lastIndex = this.lastIndexOf("T", ignoreCase = true)

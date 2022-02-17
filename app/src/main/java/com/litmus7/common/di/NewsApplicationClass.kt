@@ -1,4 +1,4 @@
-package com.litmus7.news.di
+package com.litmus7.common.di
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

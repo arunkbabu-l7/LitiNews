@@ -1,6 +1,6 @@
-package com.litmus7.news.util
+package com.litmus7.common.util
 
-import com.litmus7.news.domain.NewsResponse
+import com.litmus7.common.domain.NewsResponse
 
 sealed class NewsEvent {
     class Success(val newsResponse: NewsResponse): NewsEvent()

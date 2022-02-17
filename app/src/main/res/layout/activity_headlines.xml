@@ -19,7 +19,7 @@
         android:layout_height="match_parent" />
 
     <include
-        android:id="@+id/error_layout"
+        android:id="@+id/layout_error"
         layout="@layout/layout_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

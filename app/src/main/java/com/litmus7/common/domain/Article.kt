@@ -1,11 +1,11 @@
-package com.litmus7.news.domain
+package com.litmus7.common.domain
 
 import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.litmus7.news.util.toCleanDate
+import com.litmus7.common.util.toCleanDate
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

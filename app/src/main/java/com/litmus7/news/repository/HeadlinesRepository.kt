@@ -1,14 +1,14 @@
 package com.litmus7.news.repository
 
 import android.util.Log
+import com.litmus7.common.domain.Article
+import com.litmus7.common.domain.NewsResponse
+import com.litmus7.common.exception.NewsFetchException
+import com.litmus7.common.network.HeadlinesDataSource
+import com.litmus7.common.util.NetworkUtils
+import com.litmus7.common.util.Result
+import com.litmus7.common.util.toCachedNewsResponse
 import com.litmus7.news.database.NewsDbDataSource
-import com.litmus7.news.domain.Article
-import com.litmus7.news.domain.NewsResponse
-import com.litmus7.news.exception.NewsFetchException
-import com.litmus7.news.network.HeadlinesDataSource
-import com.litmus7.news.util.NetworkUtils
-import com.litmus7.news.util.Result
-import com.litmus7.news.util.toCachedNewsResponse
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 

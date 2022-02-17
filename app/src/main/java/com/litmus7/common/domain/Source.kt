@@ -1,4 +1,4 @@
-package com.litmus7.news.domain
+package com.litmus7.common.domain
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

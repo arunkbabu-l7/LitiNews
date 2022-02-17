@@ -3,10 +3,10 @@ package com.litmus7.news.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.net.toUri
+import com.litmus7.common.domain.Article
+import com.litmus7.common.domain.Source
+import com.litmus7.common.util.*
 import com.litmus7.news.databinding.ActivityDetailsBinding
-import com.litmus7.news.domain.Article
-import com.litmus7.news.domain.Source
-import com.litmus7.news.util.*
 
 class DetailsActivity : BaseActivity() {
     private lateinit var binding: ActivityDetailsBinding
@@ -18,17 +18,17 @@ class DetailsActivity : BaseActivity() {
         setContentView(binding.root)
 
         val articleBundle = intent?.getBundleExtra(NEWS_BUNDLE_EXTRAS_KEY)
-        articleBundle?.let { b ->
-            val id = b.getInt(NEWS_AUTHOR_ID)
-            val author = b.getString(NEWS_AUTHOR_KEY) ?: ""
-            val content = b.getString(NEWS_CONTENT_KEY) ?: ""
-            val description = b.getString(NEWS_DESCRIPTION_KEY) ?: ""
-            val publishedAt = b.getString(NEWS_PUBLISHED_AT_KEY) ?: ""
-            val sourceName = b.getString(NEWS_SOURCE_NAME_KEY) ?: ""
-            val sourceId = b.getString(NEWS_SOURCE_ID_KEY) ?: ""
-            val title = b.getString(NEWS_TITLE_KEY) ?: ""
-            val url = b.getString(NEWS_URL_KEY) ?: ""
-            val urlToImage = b.getString(NEWS_IMAGE_URL_KEY) ?: ""
+        articleBundle?.apply {
+            val id = getInt(NEWS_AUTHOR_ID)
+            val author = getString(NEWS_AUTHOR_KEY) ?: ""
+            val content = getString(NEWS_CONTENT_KEY) ?: ""
+            val description = getString(NEWS_DESCRIPTION_KEY) ?: ""
+            val publishedAt = getString(NEWS_PUBLISHED_AT_KEY) ?: ""
+            val sourceName = getString(NEWS_SOURCE_NAME_KEY) ?: ""
+            val sourceId = getString(NEWS_SOURCE_ID_KEY) ?: ""
+            val title = getString(NEWS_TITLE_KEY) ?: ""
+            val url = getString(NEWS_URL_KEY) ?: ""
+            val urlToImage = getString(NEWS_IMAGE_URL_KEY) ?: ""
 
             binding.article = Article(
                 id = id,
