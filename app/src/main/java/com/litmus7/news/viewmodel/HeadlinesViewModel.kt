@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.litmus7.common.domain.NewsResponse
 import com.litmus7.common.util.NewsEvent
 import com.litmus7.common.util.Result
-import com.litmus7.news.repository.HeadlinesRepository
+import com.litmus7.news.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HeadlinesViewModel @Inject constructor(
-    private val repository: HeadlinesRepository
+    private val headlinesRepository: NewsRepository
 ) : BaseViewModel() {
     var allNews: StateFlow<NewsEvent> = MutableStateFlow(NewsEvent.Empty)
         private set
@@ -29,7 +29,7 @@ class HeadlinesViewModel @Inject constructor(
         LOCK = true
 
         viewModelScope.launch(Dispatchers.IO) {
-            val newsFlow: Flow<Result<NewsResponse>> = repository.getTopHeadlines(country)
+            val newsFlow: Flow<Result<NewsResponse>> = headlinesRepository.fetchNews(country)
             allNews = newsFlow.map { newsResult ->
                 when (newsResult) {
                     is Result.Success -> {

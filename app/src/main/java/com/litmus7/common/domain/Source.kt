@@ -16,6 +16,4 @@ data class Source(
     @IgnoredOnParcel
     @PrimaryKey(autoGenerate = true)
     var sourceId: Int = -1
-
-    constructor(sourceId: Int, id: String, name: String) : this(id, name)
 }

@@ -15,7 +15,7 @@ class HeadlinesDataSource @Inject constructor(private val newsApi: NewsApi) : Ne
     private val tag = HeadlinesDataSource::class.simpleName
 
     override fun getNews(country: String) = flow {
-        Log.d(tag, "HeadlinesDataSource#getTopHeadlines()")
+        Log.d(tag, "HeadlinesDataSource#getNews()")
         // Producer Block
         try {
             val response: Response<NewsResponse> = newsApi.getTopHeadlines(country)

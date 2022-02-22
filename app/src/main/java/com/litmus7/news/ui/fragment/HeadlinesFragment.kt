@@ -21,7 +21,7 @@ class HeadlinesFragment : Fragment() {
 
     companion object {
         const val FRAGMENT_TAG = "news_topic_fragment_tag"
-        private val TAG: String = HeadlinesFragment::class.java.simpleName
+        private val TAG = HeadlinesFragment::class.simpleName
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -32,6 +32,7 @@ class HeadlinesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         adapter = NewsAdapter()
         with(binding) {
             rvNewsByTopic.adapter = adapter
@@ -58,8 +59,11 @@ class HeadlinesFragment : Fragment() {
         }
     }
 
+    /**
+     * Called when the data is fully loaded in the activity
+     */
     fun onDataLoaded(newsResponse: NewsResponse) {
-        // Initialize Recycler View
+        // Populate data to Recycler View
         val newsArticles = newsResponse.articles
         Log.d(TAG, "onDataLoaded():: ${newsArticles.size}")
 

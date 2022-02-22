@@ -13,13 +13,13 @@ import javax.inject.Inject
 class HeadlinesRepository @Inject constructor(
     private val headlinesDataSource: NewsDataSource,
     private val newsDbDataSource: NewsDataSource
-) {
+) : NewsRepository {
     private val tag = HeadlinesRepository::class.simpleName
 
-    suspend fun getTopHeadlines(country: String): Flow<Result<NewsResponse>> = flow {
-        Log.d(tag, "getTopHeadlines()")
-        val newsLoader = NewsLoader(headlinesDataSource, newsDbDataSource)
+    override fun fetchNews(country: String): Flow<Result<NewsResponse>> = flow {
+        Log.d(tag, "HeadlinesRepository#fetchNews()")
 
+        val newsLoader = NewsLoader(headlinesDataSource, newsDbDataSource)
         if (NetworkUtils.isInternetConnected) {
             emit(newsLoader.loadFromNetwork(country))
         } else {

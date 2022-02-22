@@ -25,9 +25,10 @@ import kotlin.concurrent.timerTask
 
 class HeadlinesActivity : BaseActivity() {
     private lateinit var binding: ActivityHeadlinesBinding
-    private val tag = HeadlinesActivity::class.java.simpleName
     private val viewModel: HeadlinesViewModel by viewModels()
     var hasNewData = false
+
+    private val tag = HeadlinesActivity::class.java.simpleName
 
     companion object {
         private const val HAS_DATA_SAVE_INSTANCE_KEY = "key_has_data_save_instance"

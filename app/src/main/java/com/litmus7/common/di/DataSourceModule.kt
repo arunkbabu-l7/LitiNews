@@ -3,6 +3,7 @@ package com.litmus7.common.di
 import com.litmus7.common.network.NewsApi
 import com.litmus7.news.database.NewsDao
 import com.litmus7.news.datasource.HeadlinesDataSource
+import com.litmus7.news.datasource.NewsDataSource
 import com.litmus7.news.datasource.NewsDbDataSource
 import dagger.Module
 import dagger.Provides
@@ -13,8 +14,8 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object DataSourceModule {
     @Provides
-    fun provideHeadlinesDataSource(newsApi: NewsApi) = HeadlinesDataSource(newsApi)
+    fun provideHeadlinesDataSource(newsApi: NewsApi): NewsDataSource = HeadlinesDataSource(newsApi)
 
     @Provides
-    fun provideNewsDbDataSource(dao: NewsDao) = NewsDbDataSource(dao)
+    fun provideNewsDbDataSource(dao: NewsDao): NewsDataSource = NewsDbDataSource(dao)
 }

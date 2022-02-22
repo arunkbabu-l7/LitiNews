@@ -3,6 +3,7 @@ package com.litmus7.common.di
 import com.litmus7.news.datasource.HeadlinesDataSource
 import com.litmus7.news.datasource.NewsDbDataSource
 import com.litmus7.news.repository.HeadlinesRepository
+import com.litmus7.news.repository.NewsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,5 +19,5 @@ object AppModule {
     fun provideHeadlinesRepository(
         dataSource: HeadlinesDataSource,
         dbDataSource: NewsDbDataSource
-    ) = HeadlinesRepository(dataSource, dbDataSource)
+    ): NewsRepository = HeadlinesRepository(dataSource, dbDataSource)
 }
