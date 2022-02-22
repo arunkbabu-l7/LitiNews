@@ -9,6 +9,5 @@ fun String.toCleanDate(): String {
     return this.substring(0, lastIndex)
 }
 
-fun List<Article>.toCachedNewsResponse(): NewsResponse {
-    return NewsResponse(articles = this, NewsResponse.STATUS_CACHED, this.size)
-}
+fun List<Article>.toCachedNewsResponse() =
+    NewsResponse(articles = this, status = NewsResponse.STATUS_CACHED, totalResults = this.size)

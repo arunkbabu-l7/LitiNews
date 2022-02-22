@@ -5,7 +5,8 @@ import android.os.Bundle
 import androidx.core.net.toUri
 import com.litmus7.common.domain.Article
 import com.litmus7.common.domain.Source
-import com.litmus7.common.util.*
+import com.litmus7.common.util.Constants
+import com.litmus7.common.util.toCleanDate
 import com.litmus7.news.databinding.ActivityDetailsBinding
 
 class DetailsActivity : BaseActivity() {
@@ -17,18 +18,18 @@ class DetailsActivity : BaseActivity() {
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val articleBundle = intent?.getBundleExtra(NEWS_BUNDLE_EXTRAS_KEY)
+        val articleBundle = intent?.getBundleExtra(Constants.NEWS_BUNDLE_EXTRAS_KEY)
         articleBundle?.apply {
-            val id = getInt(NEWS_AUTHOR_ID)
-            val author = getString(NEWS_AUTHOR_KEY) ?: ""
-            val content = getString(NEWS_CONTENT_KEY) ?: ""
-            val description = getString(NEWS_DESCRIPTION_KEY) ?: ""
-            val publishedAt = getString(NEWS_PUBLISHED_AT_KEY) ?: ""
-            val sourceName = getString(NEWS_SOURCE_NAME_KEY) ?: ""
-            val sourceId = getString(NEWS_SOURCE_ID_KEY) ?: ""
-            val title = getString(NEWS_TITLE_KEY) ?: ""
-            val url = getString(NEWS_URL_KEY) ?: ""
-            val urlToImage = getString(NEWS_IMAGE_URL_KEY) ?: ""
+            val id = getInt(Constants.NEWS_AUTHOR_ID)
+            val author = getString(Constants.NEWS_AUTHOR_KEY) ?: ""
+            val content = getString(Constants.NEWS_CONTENT_KEY) ?: ""
+            val description = getString(Constants.NEWS_DESCRIPTION_KEY) ?: ""
+            val publishedAt = getString(Constants.NEWS_PUBLISHED_AT_KEY) ?: ""
+            val sourceName = getString(Constants.NEWS_SOURCE_NAME_KEY) ?: ""
+            val sourceId = getString(Constants.NEWS_SOURCE_ID_KEY) ?: ""
+            val title = getString(Constants.NEWS_TITLE_KEY) ?: ""
+            val url = getString(Constants.NEWS_URL_KEY) ?: ""
+            val urlToImage = getString(Constants.NEWS_IMAGE_URL_KEY) ?: ""
 
             binding.article = Article(
                 id = id,
@@ -43,7 +44,6 @@ class DetailsActivity : BaseActivity() {
                 urlToImage = urlToImage
             )
 
-            // Apply an Underline on "Source"
             binding.tvReadMore.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW).apply {
                     data = url.toUri()

@@ -1,7 +1,7 @@
 package com.litmus7.common.di
 
 import com.litmus7.common.network.NewsApi
-import com.litmus7.common.util.BASE_URL
+import com.litmus7.common.util.Constants
 import com.litmus7.news.BuildConfig
 import dagger.Module
 import dagger.Provides
@@ -44,7 +44,7 @@ object ApiModule {
     @Provides
     fun provideNewsApi(client: OkHttpClient): NewsApi {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

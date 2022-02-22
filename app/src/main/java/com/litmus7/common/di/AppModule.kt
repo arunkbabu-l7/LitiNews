@@ -1,7 +1,7 @@
 package com.litmus7.common.di
 
-import com.litmus7.common.network.HeadlinesDataSource
-import com.litmus7.news.database.NewsDbDataSource
+import com.litmus7.news.datasource.HeadlinesDataSource
+import com.litmus7.news.datasource.NewsDbDataSource
 import com.litmus7.news.repository.HeadlinesRepository
 import dagger.Module
 import dagger.Provides
